@@ -113,6 +113,9 @@ struct reserva_{
 	filtros_ filtros;
 }reserva;
 
+	int dias=0;
+	int horas=0;
+
 //Firmas
 void llenardatos();
 void mostrarhoteles(ciudades &ciudad, string &nombre_hotel);
@@ -120,6 +123,9 @@ void mostrarhoteles_precioM(ciudades &ciudad, string &nombre_hotel);
 void mostrarhoteles_preciom(ciudades &ciudad, string &nombre_hotel);
 void mostrarhoteles_valoracion(ciudades &ciudad, string &nombre_hotel);
 void comentarios(ciudades &ciudad, string &nombre_hotel);
+void precio_total(ciudades &ciudad, string &nombre_hotel);
+void confirmar();
+int cerrar();
 
 //--------------------------------------------------------------------------------------------------------------------------
 
@@ -346,12 +352,14 @@ void menu_clien(bool &sesion, string &nombre_hotel){
 			cout<<"0. Para Cerrar sesion"<<endl;
 			cout<<"1. Si desea ingresar los datos."<<endl;
 	    	cout<<"2. Si desea ver los hoteles disponibles y escoger uno."<<endl;
-	    	cout<<"3. Si desea ver los comentarios del hotel que escogio. "<<endl;
-	    	cout<<"4. Si desea ingresar un comentario. "<<endl;
+	    	cout<<"3. Si desea ver los comentarios del hotel que escogio."<<endl;
+	    	cout<<"4. Si desea ingresar un comentario."<<endl;
+	    	cout<<"5. Si desea ver el costo total."<<endl;
+	    	cout<<"6. Si desea confirmar la reserva o volver al inicio."<<endl;
 			cout<<"Que opcion desea?: ";
 			cin>>op;
 			fflush(stdin);
-		} while ((op>4) || (op<0));
+		} while ((op>6) || (op<0));
 			
 		switch(op){
 			case 1:
@@ -363,34 +371,34 @@ void menu_clien(bool &sesion, string &nombre_hotel){
 				system("cls");
 				
 				do{
-				do{
-					system("cls");
-					cout<<"0. Para volver al menu anterior.\n";
-					cout<<"1. Para ver los hoteles por orden de valoracion.\n";
-					cout<<"2. Para ver los hoteles por orden de menor a mayor precio.\n";
-					cout<<"3. Para ver los hoteles por orden de mayor a menor precio.\n";
-					cin>>opc;
-					fflush(stdin);
-				} while ((opc>3) || (opc<0));
-					
-				switch (opc){
-					
-					case 1:
-						system ("cls");
-						mostrarhoteles_valoracion(ciudad, nombre_hotel);
-						break;
-					
-					case 2:
-						system ("cls");
-						mostrarhoteles_preciom(ciudad, nombre_hotel);
-						break;
-					
-					case 3:
-						system ("cls");
-						mostrarhoteles_precioM(ciudad, nombre_hotel);
-						break;	
-				}
-			} while(opc!=0);
+					do{
+						system("cls");
+						cout<<"0. Para volver al menu anterior.\n";
+						cout<<"1. Para ver los hoteles por orden de valoracion.\n";
+						cout<<"2. Para ver los hoteles por orden de menor a mayor precio.\n";
+						cout<<"3. Para ver los hoteles por orden de mayor a menor precio.\n";
+						cin>>opc;
+						fflush(stdin);
+					} while ((opc>3) || (opc<0));
+						
+					switch (opc){
+						
+						case 1:
+							system ("cls");
+							mostrarhoteles_valoracion(ciudad, nombre_hotel);
+							break;
+						
+						case 2:
+							system ("cls");
+							mostrarhoteles_preciom(ciudad, nombre_hotel);
+							break;
+						
+						case 3:
+							system ("cls");
+							mostrarhoteles_precioM(ciudad, nombre_hotel);
+							break;	
+					}
+				} while(opc!=0);
 			
 				break;
 			
@@ -400,9 +408,44 @@ void menu_clien(bool &sesion, string &nombre_hotel){
 				break;
 			
 			case 4:
-					system("cls");
-					agg_coment();
-					break;
+				system("cls");
+				agg_coment();
+				break;
+			
+			case 5:
+				system("cls");
+				precio_total(ciudad, nombre_hotel);
+				break;
+			
+			case 6:
+				system("cls");
+				
+				do{
+					do{
+						system("cls");
+						cout<<"0. Para volver al menu anterior.\n";
+						cout<<"1. Para confirmar la reserva.\n";
+						cout<<"2. para cancelar todo.\n";
+						cin>>opc;
+						fflush(stdin);
+					} while ((opc>3) || (opc<0));
+				
+					switch (opc){
+						
+						case 1:
+							system("cls");
+							confirmar();
+							break;
+						
+						case 2:
+							system("cls");
+							cerrar();
+							break;
+						
+					}
+				} while(opc!=0);
+				
+				break;
 			
 		}
 			
@@ -468,17 +511,36 @@ void llenardatos(){
 	
 	fflush(stdin);
 	cout<<"\nIngrese la fecha de llegada.\n";
-	cout<<"Dia: "; cin>>reserva.llegada.dia;
-	cout<<"Mes: "; cin>>reserva.llegada.mes;
+	do{
+		cout<<"Dia: "; cin>>reserva.llegada.dia;
+	} while (reserva.llegada.dia > 30);
+	
+	do{
+		cout<<"Mes: "; cin>>reserva.llegada.mes;
+	} while(reserva.llegada.mes > 12);
+	
 	cout<<"Año: "; cin>>reserva.llegada.anio;
-	cout<<"Hora: "; cin>>reserva.llegada.hora;
+	
+	do{
+		cout<<"Hora: "; cin>>reserva.llegada.hora;
+	} while(reserva.llegada.hora > 24);
 	
 	fflush(stdin);
 	cout<<"\nIngrese la fecha de salida.\n";
-	cout<<"Dia: "; cin>>reserva.salida.dia;
-	cout<<"Mes: "; cin>>reserva.salida.mes;
+	
+	do{
+		cout<<"Dia: "; cin>>reserva.salida.dia;
+	} while (reserva.salida.dia > 30);
+	
+	do{
+		cout<<"Mes: "; cin>>reserva.salida.mes;
+	} while (reserva.salida.mes > 12);
+	
 	cout<<"Año: "; cin>>reserva.salida.anio;
-	cout<<"Hora: "; cin>>reserva.salida.hora;
+	
+	do{
+		cout<<"Hora: "; cin>>reserva.salida.hora;
+	} while (reserva.salida.hora > 24);
 	
 	fflush(stdin);
 	cout<<"\nIngrese la ciudad en la que estara. "<<endl;
@@ -1124,4 +1186,71 @@ void mostrarusuarios(int &clien,int &n_clien){
 		cout<<endl;
 	}
 	system("pause");
+}
+
+void precio_total(ciudades &ciudad, string &nombre_hotel){
+	
+	getchar();
+	int op;
+	int mes1_1;
+	mes1_1 = reserva.llegada.mes;
+	
+	if (mes1_1==12){
+		mes1_1=0;
+	}
+	
+	if (reserva.salida.anio-reserva.llegada.anio >= 2){
+		cout<<"No existen reservas para tantos dias.\n";
+	}
+	else if (((reserva.salida.mes*30+reserva.salida.dia)-(mes1_1*30+reserva.llegada.dia) >= 15) || (mes1_1 > reserva.salida.mes)){
+		cout<<"No existen reservas para tantos dias.\n";
+	}
+	else{
+		while (reserva.llegada.hora != reserva.salida.hora){
+			if (reserva.llegada.hora == 25){
+				reserva.llegada.hora=1;
+			}
+			
+			reserva.llegada.hora++;
+			horas++;
+		}
+		
+		while (reserva.llegada.dia != reserva.salida.dia){
+			if (reserva.llegada.dia == 31){
+				reserva.llegada.dia = 1;
+			}
+			reserva.llegada.dia++;
+			dias++;
+		}
+		cout<<"Usted estara "<<dias<<" Dias y "<<horas<<" Horas."<<endl;
+	}
+	
+	cout<<"Su costo total sera: ";
+	
+    FILE *archdisco;
+    archdisco = fopen("Hoteles.txt","at+");
+    
+    while (fread(&ciudad,sizeof(ciudad),1,archdisco)==1){
+    	
+    	if ((nombre_hotel == ciudad.hotel) && (reserva.hotel.ciudad == ciudad.ciudad) &&
+		(reserva.entradas == ciudad.personas)){
+    		
+    		cout<<ciudad.precio*dias + ((ciudad.precio/24)*horas);
+    		cout<<endl;
+    		system("pause");
+		}
+		
+    }
+    
+	system("pause");
+    fclose(archdisco);
+
+}
+
+void confirmar(){
+	
+}
+
+int cerrar(){
+	return main();
 }
